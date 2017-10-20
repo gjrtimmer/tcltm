@@ -13,7 +13,7 @@ build::latest:
     - docker build --pull --force-rm=true 
         --build-arg VCS_REF=`git rev-parse --short HEAD` 
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=$(cat REPOSITORY)/${CI_PROJECT_PATH,,} .
+        --tag=${REGISTRY}/${CI_PROJECT_PATH,,} .
 
 build::branches:
   stage: build
@@ -25,7 +25,7 @@ build::branches:
     - docker build --pull --force-rm=true 
         --build-arg VCS_REF=`git rev-parse --short HEAD` 
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=$(cat REPOSITORY)/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME} .
+        --tag=${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME} .
     
 deploy::latest:
   stage: deploy
@@ -34,7 +34,7 @@ deploy::latest:
   only:
     - master
   script:
-    - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH,,}
+    - docker push ${REGISTRY}/${CI_PROJECT_PATH,,}
 
 deploy::branches:
   stage: deploy
@@ -43,7 +43,7 @@ deploy::branches:
   except:
     - master
   script:
-    - docker push $(cat REPOSITORY)/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}
+    - docker push ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}
     
 clean::latest:
   stage: clean
@@ -52,8 +52,8 @@ clean::latest:
   only:
     - master
   script:
-    -   if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH}) ]; then 
-            docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH,,};
+    -   if [ ! -z $(docker images -q ${REGISTRY}/${CI_PROJECT_PATH}) ]; then 
+            docker rmi ${REGISTRY}/${CI_PROJECT_PATH,,};
         fi
 
 clean::branches:
@@ -63,6 +63,6 @@ clean::branches:
   except:
     - master
   script:
-    -   if [ ! -z $(docker images -q $(cat REPOSITORY)/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}) ]; then 
-            docker rmi $(cat REPOSITORY)/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME};
+    -   if [ ! -z $(docker images -q ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}) ]; then 
+            docker rmi ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME};
         fi
