@@ -4,7 +4,7 @@ stages:
   - clean
 
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
+  - docker login -u gitlab-ci-token --password-stdin $CI_BUILD_TOKEN $REGISTRY
   
 build::latest:
   stage: build
