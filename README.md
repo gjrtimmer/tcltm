@@ -1,6 +1,10 @@
 # tcltm - Tcl Module Builder
 
 [![pipeline status](https://gitlab.timmertech.nl/VANAD/cpm/tcltm/badges/master/pipeline.svg)](https://gitlab.timmertech.nl/VANAD/cpm/tcltm/commits/master)
+[![](https://images.microbadger.com/badges/image/datacore/tcltm.svg)](https://microbadger.com/images/datacore/tcltm)
+[![](https://images.microbadger.com/badges/version/datacore/tcltm.svg)](https://microbadger.com/images/datacore/tcltm)
+[![](https://images.microbadger.com/badges/commit/datacore/tcltm.svg)](https://microbadger.com/images/datacore/tcltm)
+[![](https://images.microbadger.com/badges/license/datacore/tcltm.svg)](https://microbadger.com/images/datacore/tcltm)
 
 # Table of Contents
 - [Dependencies](#dependencies)
