@@ -2,6 +2,9 @@ stages:
   - build
   - deploy
   - clean
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
   
 build::latest:
   stage: build
