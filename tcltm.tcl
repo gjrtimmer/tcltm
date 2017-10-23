@@ -24,7 +24,7 @@ namespace eval ::tcltm {
         variable config
 
         # Parse commandline options
-        array set options {directory {} out {} create 0 scan {} help 0 strip 0 extension tm}
+        array set options {directory {} out {} create 0 scan {} help 0 strip 0 extension tm skip-provide 0}
         while { [llength $args] } {
             switch -glob -- [lindex $args 0] {
                 --ext*              {set args [lassign $args - options(extension)]}
@@ -37,6 +37,7 @@ namespace eval ::tcltm {
                 -s* -
                 --scan*             {set args [lassign $args - options(scan)]}
                 --strip-comments*   {set options(strip) 1; set args [lrange $args 1 end]}
+                --skip-provide*     {set options(skip-provide) 1; set args [lrange $args 1 end]}
                 -h* -
                 --help*             {set options(help) 1; set args [lrange $args 1 end]}
                 default             {break}
@@ -152,8 +153,10 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
             }
 
             # Package declaration
-            lappend pkgcontent [::tcltm::markup::script {package provide %s %s} [dict get $pkg Name] [dict get $pkg Version]]
-            lappend pkgcontent [::tcltm::markup::nl]
+            if { !$options(skip-provide) } {
+                lappend pkgcontent [::tcltm::markup::script {package provide %s %s} [dict get $pkg Name] [dict get $pkg Version]]
+                lappend pkgcontent [::tcltm::markup::nl]
+            }
 
             # Detect if binary loader needs to be activated
             if { [::tcltm::binary::present [dict get $pkg Files]] } {

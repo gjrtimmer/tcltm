@@ -29,7 +29,8 @@ $ tcltm -d . -o ../
 | ```-d``` DIR | ```--dir``` DIR | Input Directory | ```-d ./tcllib1.18/mime``` |
 | ```-o``` DIR | ```--out``` DIR | Output directory | ```-o ./tcl8/8.6```
 | ```-c``` | ```--create-dirs``` | Create target directory structure (Example: tcl/8.6) | |
-| ```-s``` FILE | ```--scan``` FILE | Scan for required packages | 
+| ```-s``` FILE | ```--scan``` FILE | Scan for required packages |
+| | ```--skip-provide``` | Do not add ```package provide``` | |
 
 # .tcltm
 A Tcl Module is created based upon the .tcltm file present within the directory.
