@@ -47,11 +47,17 @@ namespace eval ::tcltm {
         }
 
         if { [string length $options(directory)] == 0 } {
-            puts "Missing parameter input directory"; exit 1
+            puts stdout "No input directory provided"
+            puts stdout "  => Using current working directory \[[file normalize [pwd]]\]"
+            set options(directory) [file normalize [pwd]]
+            flush stdout
         }
 
         if { [string length $options(out)] == 0 } {
-            puts "Missing parameter output directory"; exit 1
+            puts stdout "No output directory provided"
+            puts stdout "  => Using current working directory \[[file normalize [pwd]]\]"
+            set options(out) [file normalize [pwd]]
+            flush stdout
         }
 
         # Check for configuration
