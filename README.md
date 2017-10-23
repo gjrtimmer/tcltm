@@ -25,6 +25,7 @@ $ tcltm -d . -o ../
 
 | Short | Long | Description | Usage |
 |-------|------|-------------|-------|
+| | ```--ext``` EXT | Set target file extension (default: tm) | |
 | ```-d``` DIR | ```--dir``` DIR | Input Directory | ```-d ./tcllib1.18/mime``` |
 | ```-o``` DIR | ```--out``` DIR | Output directory | ```-o ./tcl8/8.6```
 | ```-c``` | ```--create-dirs``` | Create target directory structure (Example: tcl/8.6) | |

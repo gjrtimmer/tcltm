@@ -12,20 +12,22 @@ namespace eval ::tcltm {
 
     proc usage {} {
         puts stdout {tcltm ?options?
-    -d DIR, --dir DIR, --directory DIR      Input directory
-    -o DIR, --out DIR                       Output directory
-    -c                                      Create Tcl target structure
-    -s FILE, --scan FILE                    Scan Tcl file for dependencies
-    -h, --help                              Show help}
+    --ext                   Set target file extension (default: tm)
+    -d DIR, --dir DIR       Input directory
+    -o DIR, --out DIR       Output directory
+    -c --create-dirs        Create Tcl target structure
+    -s FILE, --scan FILE    Scan Tcl file for dependencies
+    -h, --help              Show help}
     }
 
     proc main { args } {
         variable config
 
         # Parse commandline options
-        array set options {directory {} out {} create 0 scan {} help 0 strip 0}
+        array set options {directory {} out {} create 0 scan {} help 0 strip 0 extension tm}
         while { [llength $args] } {
             switch -glob -- [lindex $args 0] {
+                --ext*              {set args [lassign $args - options(extension)]}
                 -d* -
                 --dir*              {set args [lassign $args - options(directory)]}
                 -o* -
@@ -259,7 +261,7 @@ unset -nocomplain fh}]
             }
 
             # Write Tcl Module            
-            set filename [format {%s-%s.tm} [dict get $pkg Name] [dict get $pkg Version]]
+            set filename [format {%s-%s.%s} [dict get $pkg Name] [dict get $pkg Version] $options(extension)]
 
             if { $options(create) } {
                 set tcldir "tcl[lindex [split [dict get $pkg Tcl] "."] 0]"
