@@ -142,8 +142,7 @@ namespace eval ::tcltm {
             lappend pkgcontent [::tcltm::markup::script {
 if { ![package vsatisfies [package provide Tcl] %s] } {
     return -code error "Unable to load module '%s' Tcl: '%s' is required"
-}
-            } [dict get $pkg Tcl] [dict get $pkg Name] [dict get $pkg Tcl]]
+}} [dict get $pkg Tcl] [dict get $pkg Name] [dict get $pkg Tcl]]
 
             if { [dict exists $pkg Dependencies] && [string length [dict get $pkg Dependencies]] > 0 } {
                 foreach r [dict get $pkg Dependencies] {
