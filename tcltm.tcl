@@ -46,6 +46,34 @@ namespace eval ::tcltm {
             exit 1
         }
 
+        if { [string length $options(scan)] > 0 } {
+            #puts stdout [file normalize $options(scan)]
+            #if { ![file exists [file normalize $options(scan)]] } {
+            #    puts stdout "File [file normalize $options(scan)] does not exists";flush stdout
+            #    exit 1
+            #}
+            set f [file normalize [lindex $options(scan) 0]]
+            if { ![file exists $f] } {
+                puts stdout "File '$f' does not exists"
+                exit 1
+            }
+            
+            puts stdout "Scanning: $f"
+            set b [open $f]
+            fconfigure $b -translation binary
+            fconfigure $b -encoding binary
+            set data [read $b]
+            close $b
+
+            foreach line [split $data "\n"] {
+                if { [regexp {package require(?:[[:blank:]]+)([_[:alpha:]][:_[:alnum:]]*)((?:[[:blank:]]+)?(?:(\d+\.)?(\d+\.)?(\*|\d+))?)} $line match pkg ver] } {
+                    puts stdout "$pkg [string trim $ver]"
+                }
+            }
+
+            exit
+        }
+
         if { [string length $options(directory)] == 0 } {
             puts stdout "No input directory provided"
             puts stdout "  => Using current working directory \[[file normalize [pwd]]\]"
