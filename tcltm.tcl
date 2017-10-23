@@ -155,9 +155,19 @@ close $fh} [::tcltm::binary::filename $f] [::tcltm::binary::filesize $options(di
                         lappend pkgcontent [::tcltm::markup::script {
 load $tmpBinary
 catch {file delete -force $tmpBinary}
-unset -nocomplain fh tmpBinary}]
+unset -nocomplain fh}]
+                    } else {
+                        # No auto-loading of libraries
+                        # assume the user wants to handle the binary themselfs.
+                        # add extract binaries to variable
+                        # so the user can use it within the init script
+                        lappend pkgcontent [::tcltm::markup::script {lappend binFiles $tmpBinary}]
                     }
+                    lappend pkgcontent [::tcltm::markup::script {unset -nocomplain tmpBinary}]
                 }
+
+                # Auto auto unload variables
+                lappend pkgcontent [::tcltm::markup::script {unset -nocomplain bindata binaryIndex}]
 
                 lappend pkgcontent [::tcltm::markup::comment "TCLTM BINARY LOADER END"]
                 lappend pkgcontent [::tcltm::markup::nl]

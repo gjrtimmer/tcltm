@@ -21,6 +21,12 @@ This can be achieved be defining the file as ```file:load```.
 
 The ```.tm``` file will extract the embedded libary and directly issue the Tcl ```load``` command.
 
+If there is no command given for a binary, the ```tcltm``` builder will generate code
+which will add the extract binary path to the variable ```binFiles``` which the user then
+can use within the init script to handle the binary themself.
+
+***NOTE*** The user will be responsible for cleaning up the variable ```binFiles``` within the init script
+
 
 ```yaml
 ---
