@@ -216,7 +216,9 @@ unset -nocomplain fh}]
                         if { $options(strip) && [::tcltm::markup::iscomment $line] } {
                             # Ignore line
                         } else {
-                            lappend pkgcontent $line
+                            if { ![regexp {^(?:([[:blank:]]+)?)package provide*} $line] && ![regexp {^(?:([[:blank:]]+)?)package require.*$} $line] } {
+                                lappend pkgcontent $line
+                            } 
                         }
                     }
                 }
