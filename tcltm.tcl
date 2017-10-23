@@ -280,7 +280,7 @@ unset -nocomplain fh}]
                 set filepath [file normalize [file join [file dirname [file normalize $options(out)]] $filename]]
             }
 
-            puts stdout "Package: $filename"
+            puts stdout "Package: $filename \[$filepath\]"
             set fh [open $filepath w]
             fconfigure $fh -translation lf
             puts $fh [join $pkgcontent "\n"]
