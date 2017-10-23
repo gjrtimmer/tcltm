@@ -27,11 +27,11 @@ namespace eval ::tcltm {
         while { [llength $args] } {
             switch -glob -- [lindex $args 0] {
                 -d* -
-                --dir* -
-                --directory*        {set args [lassign $args - options(directory)]}
+                --dir*              {set args [lassign $args - options(directory)]}
                 -o* -
                 -out*               {set args [lassign $args - options(out)]}
-                -c*                 {set options(create) 1; set args [lrange $args 1 end]}
+                -c* -
+                --create-dirs*      {set options(create) 1; set args [lrange $args 1 end]}
                 -s* -
                 --scan*             {set args [lassign $args - options(scan)]}
                 --strip-comments*   {set options(strip) 1; set args [lrange $args 1 end]}
@@ -260,7 +260,20 @@ unset -nocomplain fh}]
 
             # Write Tcl Module            
             set filename [format {%s-%s.tm} [dict get $pkg Name] [dict get $pkg Version]]
-            set filepath [file normalize [file join [file dirname [file normalize $options(out)]] $filename]]
+
+            if { $options(create) } {
+                set tcldir "tcl[lindex [split [dict get $pkg Tcl] "."] 0]"
+                set outdir [file normalize [file join $options(out) $tcldir [dict get $pkg Tcl]]]
+                try {
+                    file mkdir $outdir
+                } on error err {
+                    puts stdout "Failed to create output directory \[$outdir\]"
+                }
+                set filepath [file join $outdir $filename]
+            } else {
+                set filepath [file normalize [file join [file dirname [file normalize $options(out)]] $filename]]
+            }
+
             puts stdout "Package: $filename"
             set fh [open $filepath w]
             fconfigure $fh -translation lf

@@ -25,9 +25,9 @@ $ tcltm -d . -o ../
 
 | Short | Long | Description | Usage |
 |-------|------|-------------|-------|
-| ```-d``` DIR | ```--dir``` DIR, ```--directory``` DIR | Input Directory | ```-d ./tcllib1.18/mime``` |
+| ```-d``` DIR | ```--dir``` DIR | Input Directory | ```-d ./tcllib1.18/mime``` |
 | ```-o``` DIR | ```--out``` DIR | Output directory | ```-o ./tcl8/8.6```
-| ```-c``` | | Create target directory structure (Example: tcl/8.6) | |
+| ```-c``` | ```--create-dirs``` | Create target directory structure (Example: tcl/8.6) | |
 | ```-s``` FILE | ```--scan``` FILE | Scan for required packages | 
 
 # .tcltm
