@@ -261,6 +261,9 @@ unset -nocomplain fh}]
             }
 
             # Write Tcl Module
+            if { [dict exists $pkg Extension] } {
+                set options(extension) [dict get $pkg Extension]
+            }
             regsub -all {^M} $options(extension) {} options(extension)
             set filename [format {%s-%s.%s} [dict get $pkg Name] [dict get $pkg Version] $options(extension)]
 
