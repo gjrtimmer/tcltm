@@ -157,7 +157,6 @@ load $tmpBinary
 catch {file delete -force $tmpBinary}
 unset -nocomplain fh tmpBinary}]
                     }
-
                 }
 
                 lappend pkgcontent [::tcltm::markup::comment "TCLTM BINARY LOADER END"]
@@ -186,7 +185,6 @@ unset -nocomplain fh tmpBinary}]
             foreach f [dict get $pkg Files] {
                 if { [file extension [::tcltm::binary::filename $f]] eq ".tcl" } {
                     foreach line [split [::tcltm::binary::readfile $options(directory) [::tcltm::binary::filename $f]] "\n"] {
-                        
                         if { $options(strip) && [::tcltm::markup::iscomment $line] } {
                             # Ignore line
                         } else {
