@@ -277,10 +277,10 @@ unset -nocomplain fh}]
                 }
                 set filepath [file join $outdir $filename]
             } else {
-                set filepath [file normalize [file join [file dirname [file normalize $options(out)]] $filename]]
+                set filepath [file normalize [file join [file normalize $options(out)] $filename]]
             }
+            puts stdout $filepath
 
-            puts stdout "Package: $filename \[$filepath\]"
             set fh [open $filepath w]
             fconfigure $fh -translation lf
             puts $fh [join $pkgcontent "\n"]
@@ -290,6 +290,8 @@ unset -nocomplain fh}]
                 puts $fh [::tcltm::binary::readfile $options(directory) $file]
             }
             close $fh
+
+            puts stdout "Package: $filename \[$filepath\]"
         }
     }
 }
