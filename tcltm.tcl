@@ -260,7 +260,8 @@ unset -nocomplain fh}]
                 lappend pkgcontent [::tcltm::markup::comment "TCLTM BINARY SECTION BEGIN"]
             }
 
-            # Write Tcl Module            
+            # Write Tcl Module
+            regsub -all {^M} $options(extension) {} options(extension)
             set filename [format {%s-%s.%s} [dict get $pkg Name] [dict get $pkg Version] $options(extension)]
 
             if { $options(create) } {
