@@ -173,8 +173,26 @@ unset -nocomplain fh tmpBinary}]
             # within variable 'binaryIndex'
             if { [dict exists $pkg InitScript] && [string length [dict get $pkg InitScript]] > 0} {
                 lappend pkgcontent [::tcltm::markup::comment "TCLTM INIT BEGIN"]
-                foreach line [split [dict get $pkg InitScript] "\n"] {
-                    lappend pkgcontent [::tcltm::markup::script $line]
+                if { [llength [split [dict get $pkg InitScript] "\n"]] == 1 } {
+                    if { [string match "*.tcl" [lindex [split [dict get $pkg InitScript] "\n"] 0]] } {
+                        set initfile [lindex [split [dict get $pkg InitScript] "\n"] 0]
+                        foreach line [split [::tcltm::binary::readfile $options(directory) [::tcltm::binary::filename $initfile]] "\n"] {
+                            if { $options(strip) && [::tcltm::markup::iscomment $line] } {
+                                # Ignore line
+                            } else {
+                                lappend pkgcontent $line
+                            }
+                        }
+                    }
+                } else {
+                    # assume embedded Tcl code in InitScript specification
+                    foreach line [split [dict get $pkg InitScript] "\n"] {
+                        if { $options(strip) && [::tcltm::markup::iscomment $line] } {
+                            # Ignore line
+                        } else {
+                            lappend pkgcontent [::tcltm::markup::script $line]
+                        }
+                    }
                 }
                 lappend pkgcontent [::tcltm::markup::comment "TCLTM INIT END"]
                 lappend pkgcontent [::tcltm::markup::nl]

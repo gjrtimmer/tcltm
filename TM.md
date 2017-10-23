@@ -25,6 +25,8 @@ When using ```tcltm``` to build a Tcl Module it will scan the provided directory
 # Header
 
 # Init
+Wihtin the ```.tcltm``` specification source code can be included within the ```yaml``` file by using the multiline indicator ```|-```.
+Also a init script can be provided by specifiying a ```*.tcl``` file name.
 
 # Source
 
