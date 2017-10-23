@@ -1,5 +1,11 @@
 # .tcltm Specification
 
+Table of Contents
+ - [Required Keys](#required-keys)
+ - [Configuration Keys](#optional-keys)
+ - [Binary Files](#binary-files)
+ - [Example](#example)
+
 A ```tcltm``` specification is defined in [Yaml](https://en.wikipedia.org/wiki/YAML).
 
 Multiple packages can be defined within a single ```.tcltm``` file, the ```Package``` key
@@ -11,6 +17,21 @@ The following keys are required.
 - Version
 - Tcl
 - Files
+
+# Configuration Keys
+
+| Key | Required | Description |
+|-----|----------|-------------|
+| Name | x | Name of package |
+| Version | x | Version of package |
+| Tcl | x | Tcl version |
+| Summary | | Summary description |
+| Description | | Full description |
+| License | | License, if not present in configuration ```tcltm``` will look for a ```LICENSE``` file |
+| Dependencies | | Dependencies, version of a dependency can be specified after the name with a space |
+| Files | x | Source files to include |
+| InitScript | | Initscript, either embedded or the name of a ```.tcl``` file |
+| Extension | | Extension of generated module, defaults to ```tm``` |
 
 # Binary Files
 All files defined with the key ```Files``` which do not have the extension ```.tcl``` are treated as
