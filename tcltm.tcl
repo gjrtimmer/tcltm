@@ -213,6 +213,11 @@ unset -nocomplain fh tmpBinary}]
             }
             lappend pkgcontent [::tcltm::markup::comment "TCLTM SCRIPT SECTION END"]
 
+            if { [::tcltm::binary::present [dict get $pkg Files]] } {
+                lappend pkgcontent [::tcltm::markup::nl]
+                lappend pkgcontent [::tcltm::markup::comment "TCLTM BINARY SECTION BEGIN"]
+            }
+
             # Write Tcl Module            
             set filename [format {%s-%s.tm} [dict get $pkg Name] [dict get $pkg Version]]
             set filepath [file normalize [file join [file dirname [file normalize $options(out)]] $filename]]
