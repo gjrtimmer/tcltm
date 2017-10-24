@@ -24,20 +24,22 @@ namespace eval ::tcltm {
         variable config
 
         # Parse commandline options
-        array set options {directory {} out {} create 0 scan {} help 0 strip 0 extension tm skip-provide 0}
+        array set options {directory {} out {} create 0 scan {} help 0 strip 0 extension tm exclude-provide 0 exclude-deps 0 exclude-satisfies 0}
         while { [llength $args] } {
             switch -glob -- [lindex $args 0] {
-                --ext*              {set args [lassign $args - options(extension)]}
+                --ext*                  {set args [lassign $args - options(extension)]}
                 -d* -
-                --dir*              {set args [lassign $args - options(directory)]}
+                --dir*                  {set args [lassign $args - options(directory)]}
                 -o* -
-                -out*               {set args [lassign $args - options(out)]}
+                -out*                   {set args [lassign $args - options(out)]}
                 -c* -
-                --create-dirs*      {set options(create) 1; set args [lrange $args 1 end]}
+                --create-dirs*          {set options(create) 1; set args [lrange $args 1 end]}
                 -s* -
-                --scan*             {set args [lassign $args - options(scan)]}
-                --strip-comments*   {set options(strip) 1; set args [lrange $args 1 end]}
-                --skip-provide*     {set options(skip-provide) 1; set args [lrange $args 1 end]}
+                --scan*                 {set args [lassign $args - options(scan)]}
+                --strip-comments*       {set options(strip) 1; set args [lrange $args 1 end]}
+                --exclude-satisfies     {set options(exclude-satisfies) 1; set args [lrange $args 1 end]}
+                --exclude-provide*      {set options(exclude-provide) 1; set args [lrange $args 1 end]}
+                --exclude-dependencies  {set options(exclude-deps) 1; set args [lrange $args 1 end]}
                 -h* -
                 --help*             {set options(help) 1; set args [lrange $args 1 end]}
                 default             {break}
@@ -139,20 +141,24 @@ namespace eval ::tcltm {
             lappend pkgcontent [::tcltm::markup::nl]
 
             # Dependencies
-            lappend pkgcontent [::tcltm::markup::script {
+            if { !$options(exclude-satisfies) } {
+                lappend pkgcontent [::tcltm::markup::script {
 if { ![package vsatisfies [package provide Tcl] %s] } {
     return -code error "Unable to load module '%s' Tcl: '%s' is required"
 }} [dict get $pkg Tcl] [dict get $pkg Name] [dict get $pkg Tcl]]
+            }
 
-            if { [dict exists $pkg Dependencies] && [string length [dict get $pkg Dependencies]] > 0 } {
-                foreach r [dict get $pkg Dependencies] {
-                    lappend pkgcontent [::tcltm::markup::script {package require %s} $r]
+            if { !$options(exclude-deps) } {
+                if { [dict exists $pkg Dependencies] && [string length [dict get $pkg Dependencies]] > 0 } {
+                    foreach r [dict get $pkg Dependencies] {
+                        lappend pkgcontent [::tcltm::markup::script {package require %s} $r]
+                    }
+                    lappend pkgcontent [::tcltm::markup::nl]
                 }
-                lappend pkgcontent [::tcltm::markup::nl]
             }
 
             # Package declaration
-            if { !$options(skip-provide) } {
+            if { !$options(exclude-provide) } {
                 lappend pkgcontent [::tcltm::markup::script {package provide %s %s} [dict get $pkg Name] [dict get $pkg Version]]
                 lappend pkgcontent [::tcltm::markup::nl]
             }
