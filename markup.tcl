@@ -37,6 +37,6 @@ namespace eval ::tcltm::markup {
 
     proc script { body args } {
         regsub -all {\n$} $body {} body
-        return [string trim [string trimleft [format "[subst -nocommands -novariables $body]" {*}$args] "\n"] "\n"]
+        return [string trimleft [format "[subst -nocommands -novariables $body]" {*}$args] "\n"]
     }
 }
