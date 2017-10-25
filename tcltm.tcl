@@ -294,10 +294,14 @@ unset -nocomplain fh}]
             set fh [open $filepath w]
             fconfigure $fh -translation lf
             puts $fh [join $pkgcontent "\n"]
-            puts -nonewline $fh "\u001A"
-            fconfigure $fh -translation binary
-            foreach file [::tcltm::binary::files [dict get $pkg Files]] {
-                puts $fh [::tcltm::binary::readfile $options(directory) $file]
+
+            # Only add binary files if present
+            if { [::tcltm::binary::present [dict get $pkg Files]] } {
+                puts -nonewline $fh "\u001A"
+                fconfigure $fh -translation binary
+                foreach file [::tcltm::binary::files [dict get $pkg Files]] {
+                    puts $fh [::tcltm::binary::readfile $options(directory) $file]
+                }
             }
             close $fh
 
