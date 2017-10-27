@@ -52,11 +52,6 @@ namespace eval ::tcltm {
         }
 
         if { [string length $options(scan)] > 0 } {
-            #puts stdout [file normalize $options(scan)]
-            #if { ![file exists [file normalize $options(scan)]] } {
-            #    puts stdout "File [file normalize $options(scan)] does not exists";flush stdout
-            #    exit 1
-            #}
             set f [file normalize [lindex $options(scan) 0]]
             if { ![file exists $f] } {
                 puts stdout "File '$f' does not exists"
@@ -118,7 +113,8 @@ namespace eval ::tcltm {
 
             # Header
             lappend pkgcontent [::tcltm::markup::comment "TCLTM HEADER BEGIN"]
-            lappend pkgcontent [::tcltm::markup::meta "PACKAGE" [dict get $pkg Name] [dict get $pkg Version]]
+            lappend pkgcontent [::tcltm::markup::meta "PACKAGE" [dict get $pkg Name]]
+            lappend pkgcontent [::tcltm::markup::meta "VERSION" [dict get $pkg Version]]
             foreach key {Summary Description Tcl} {
                 if { [dict exists $pkg $key] && [string length [dict get $pkg $key]] > 0 } {
                     if { $key eq "Description" } {
