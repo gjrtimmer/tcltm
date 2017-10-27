@@ -111,7 +111,7 @@ namespace eval ::tcltm {
             }
 
             # License
-            if { [string length [dict get $pkg License]] > 0 } {
+            if { [dict exists $pkg License] && [string length [dict get $pkg License]] > 0 } {
                 lappend pkgcontent {*}[::tcltm::license::format [dict get $pkg License]]
                 lappend pkgcontent [::tcltm::markup::nl]
             }
