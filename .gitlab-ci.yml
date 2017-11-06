@@ -1,71 +1,44 @@
 stages:
   - build
   - deploy
-  - clean
 
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
   
 build::latest:
   stage: build
-  tags: 
-    - shell
+  image: docker:stable-git
   only:
     - master
   script:
     - docker build --pull --force-rm=true 
         --build-arg VCS_REF=`git rev-parse --short HEAD` 
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${REGISTRY}/${CI_PROJECT_PATH,,} .
+        --tag=${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:lower:]') .
 
 build::branches:
   stage: build
-  tags: 
-    - shell
+  image: docker:stable-git
   except:
     - master
   script:
     - docker build --pull --force-rm=true 
         --build-arg VCS_REF=`git rev-parse --short HEAD` 
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME} .
+        --tag=${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:lower:]'):${CI_BUILD_REF_NAME} .
     
 deploy::latest:
   stage: deploy
-  tags:
-    - shell
+  image: docker:stable-git
   only:
     - master
   script:
-    - docker push ${REGISTRY}/${CI_PROJECT_PATH,,}
+    - docker push ${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:lower:]')
 
 deploy::branches:
   stage: deploy
-  tags:
-    - shell
+  image: docker:stable-git
   except:
     - master
   script:
-    - docker push ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}
-    
-clean::latest:
-  stage: clean
-  tags:
-    - shell
-  only:
-    - master
-  script:
-    -   if [ ! -z $(docker images -q ${REGISTRY}/${CI_PROJECT_PATH}) ]; then 
-            docker rmi ${REGISTRY}/${CI_PROJECT_PATH,,};
-        fi
-
-clean::branches:
-  stage: clean
-  tags:
-    - shell
-  except:
-    - master
-  script:
-    -   if [ ! -z $(docker images -q ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME}) ]; then 
-            docker rmi ${REGISTRY}/${CI_PROJECT_PATH,,}:${CI_BUILD_REF_NAME};
-        fi
+    - docker push ${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:lower:]'):${CI_BUILD_REF_NAME}
