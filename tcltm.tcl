@@ -115,6 +115,9 @@ namespace eval ::tcltm {
             lappend pkgcontent [::tcltm::markup::comment "TCLTM HEADER BEGIN"]
             lappend pkgcontent [::tcltm::markup::meta "PACKAGE" [dict get $pkg Name]]
             lappend pkgcontent [::tcltm::markup::meta "VERSION" [dict get $pkg Version]]
+            if { [dict exists $pkg Type] } {
+                lappend pkgcontent [::tcltm::markup::meta "TYPE" [dict get $pkg Type]]
+            }
             foreach key {Summary Description Tcl} {
                 if { [dict exists $pkg $key] && [string length [dict get $pkg $key]] > 0 } {
                     if { $key eq "Description" } {
