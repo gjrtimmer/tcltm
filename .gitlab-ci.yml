@@ -1,44 +1,31 @@
-stages:
-  - build
-  - deploy
-
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $REGISTRY
-  
-build::latest:
+docker:master:
   stage: build
   image: docker:stable-git
   only:
     - master
+  variables:
+    DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+  before_script:
+    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
   script:
-    - docker build --pull --force-rm=true 
-        --build-arg VCS_REF=`git rev-parse --short HEAD` 
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:upper:]' '[:lower:]') .
+    - docker build --pull --force-rm=true
+      --build-arg VCS_REF=`git rev-parse --short HEAD`
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --tag=${DOCKER_IMAGE_NAME} .
+    - docker push ${DOCKER_IMAGE_NAME}
 
-build::branches:
+docker:branches:
   stage: build
   image: docker:stable-git
   except:
     - master
+  variables:
+    DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME}
+  before_script:
+    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
   script:
-    - docker build --pull --force-rm=true 
-        --build-arg VCS_REF=`git rev-parse --short HEAD` 
-        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` 
-        --tag=${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:upper:]' '[:lower:]'):${CI_BUILD_REF_NAME} .
-    
-deploy::latest:
-  stage: deploy
-  image: docker:stable-git
-  only:
-    - master
-  script:
-    - docker push ${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:upper:]' '[:lower:]')
-
-deploy::branches:
-  stage: deploy
-  image: docker:stable-git
-  except:
-    - master
-  script:
-    - docker push ${REGISTRY}/$(echo ${CI_PROJECT_PATH} | tr '[:upper:]' '[:lower:]'):${CI_BUILD_REF_NAME}
+    - docker build --pull --force-rm=true
+      --build-arg VCS_REF=`git rev-parse --short HEAD`
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --tag=${DOCKER_IMAGE_NAME} .
+    - docker push ${DOCKER_IMAGE_NAME}
