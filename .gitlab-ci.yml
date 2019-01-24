@@ -50,9 +50,19 @@ docker:master:
   image: docker:stable-git
   only:
     - master
+  variables:
+    DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
+  <<: *docker-login
+  <<: *docker-build
+
+docker:master:
+  stage: docker
+  image: docker:stable-git
+  only:
+    - master
     - tags
   variables:
-    DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
+    DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:latest
   <<: *docker-login
   <<: *docker-build
 
