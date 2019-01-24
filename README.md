@@ -49,8 +49,7 @@ tcltm -d . -o ../
 
 ### Arguments
 
-| Short | Long | Description |
-| ----- | ---- | ----------- |
+See help `tcltm --help`
 
 ### Environment Variables
 
