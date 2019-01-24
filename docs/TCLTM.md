@@ -127,9 +127,10 @@ Before a file is embedded filtering can be applied. Filtering consists of replac
 
 Default provided filter keys.
 
-| Filter Key | Description |
-| @PNAME@ | Will be replaced with the package name. |
-| @PVERSION@ | Will be replaced with the package version. |
+| Filter Key | Description                                              |
+| ---------- | -------------------------------------------------------- |
+| @PNAME@    | Will be replaced with the package name.                  |
+| @PVERSION@ | Will be replaced with the package version.               |
 | @FILENAME@ | Will be replaced with the filename of the included file. |
 
 With the configuration key `Filter`, custom filter keys can be provided. Any sub key of `Filter` will be converted to `@` + `Key Name` + `@` == `@KEY@`.
