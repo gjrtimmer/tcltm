@@ -21,7 +21,6 @@
       --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
       --build-arg VERSION="${CI_COMMIT_REF_NAME}"
       --tag=${DOCKER_IMAGE_NAME} .
-      --file=./docker/Dockerfile
     - docker push ${DOCKER_IMAGE_NAME}
 
 stages:
