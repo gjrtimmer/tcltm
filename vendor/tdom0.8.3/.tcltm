@@ -1,0 +1,10 @@
+--- # tdom
+package:
+  - name: tdom
+    version: 0.8.3
+    tcl: 8.5
+    files:
+      - name: tdom083.dll
+        type: binary
+        action: load
+      - name: tdom.tcl

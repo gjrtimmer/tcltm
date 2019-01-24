@@ -1,0 +1,32 @@
+package require Tclx
+package require tcltest
+namespace import ::tcltest::*
+
+# Module under test
+source [file join [file dirname [file normalize [info script]]] binary.tcl]
+
+test read {
+    Test: Read Binary File
+} -body {
+    # TODO: Implement Binary Read Test
+    return 1
+} -result 1
+
+test filesize {
+    Test: FileSize
+} -body {
+    set tests {
+        {{LICENSE} {1075}}
+    }
+
+    foreach t $tests {
+        set s [::tcltm::binary::filesize . [lindex $t 0]]
+        if { $s != [lindex $t 1] } {
+            return 0
+        }
+    }
+
+    return 1
+} -result 1
+
+::tcltest::cleanupTests

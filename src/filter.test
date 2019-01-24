@@ -1,0 +1,67 @@
+package require Tclx
+package require tcltest
+namespace import ::tcltest::*
+
+# Module under test
+source [file join [file dirname [file normalize [info script]]] filter.tcl]
+
+test filterLine {
+    Test: Filter Line
+} -body {
+    set ::env(FOO) "BAR"
+    set tests {
+        {PACKAGE tcltm {Package @PACKAGE@ is missing} {Package tcltm is missing}}
+    }
+    foreach t $tests {
+        set f [::tcltm::filter::line [lindex $t 2] [lindex $t 0] [lindex $t 1]]
+        if { $f ne [lindex $t 3] } {
+            return 0
+        }
+    }
+
+    return 1
+} -result 1
+
+test filterLines {
+    Test: Filter Lines
+} -body {
+    set l {
+Package @PNAME@ is missing
+Version 0.0.0 is required
+}
+
+    set r {
+Package tcltm is missing
+Version 0.0.0 is required
+}
+
+    set f [::tcltm::filter::lines $l PNAME tcltm]
+    if { $f ne $r } {
+        return 0
+    }
+
+    return 1
+} -result 1
+
+test filterMulti {
+    Test: Filter Multi
+} -body {
+    set l {
+Package @PNAME@ is missing
+Version @PVERSION@ is required
+}
+
+    set r {
+Package tcltm is missing
+Version 0.0.0 is required
+}
+
+    set f [::tcltm::filter::multi $l PNAME tcltm PVERSION 0.0.0]
+    if { $f ne $r } {
+        return 0
+    }
+
+    return 1
+} -result 1
+
+::tcltest::cleanupTests

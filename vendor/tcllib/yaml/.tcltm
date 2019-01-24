@@ -1,0 +1,31 @@
+--- # tcllib - yaml
+package:
+  - name: yaml
+    version: ~
+    tcl: 8.5
+    summary: YAML parser for Tcl
+    license: ../license.terms
+    dependencies:
+      - cmdline
+      - huddle 0.1.7
+    files:
+      - name: yaml.tcl
+  - name: huddle
+    version: ~
+    tcl: 8.5
+    summary: This library provide functions to differentinate string/list/dict in multi-ranks
+    license: ../license.terms
+    files:
+      - name: huddle_types.tcl
+      - name: huddle.tcl
+  - name: huddle::json
+    version: ~
+    tcl: 8.5
+    summary: ~
+    license: ../license.terms
+    dependencies:
+      - TclOO
+      - try
+      - huddle 0.1.7
+    files:
+      - name: json2huddle.tcl

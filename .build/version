@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ -z ${VERSION} ]; then
+    if [ -z ${CI_COMMIT_REF_NAME} ]; then
+        VERSION=$(git name-rev --name-only --tags HEAD)
+        if [ "${VERSION}" = "undefined" ]; then
+            VERSION=$(git rev-parse --abbrev-ref HEAD)
+        fi
+    else
+        VERSION=${CI_COMMIT_REF_NAME}
+    fi
+fi
+
+echo ${VERSION}
+
+# EOF

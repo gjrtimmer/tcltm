@@ -1,31 +1,68 @@
+.alpine: &alpine
+  image: alpine:3.8
+  before_script:
+    - echo 'http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
+    - apk add --no-cache --update ca-certificates git wget tcl tclx curl make sed coreutils && \
+    - apk upgrade --update --no-cache && \
+    - update-ca-certificates && \
+    - wget https://github.com/tcltk/tcllib/archive/tcllib-1-19.tar.gz -O - | tar -xz -C /tmp && \
+    - tclsh /tmp/tcllib-tcllib-1-19/installer.tcl -no-html -no-nroff -no-examples -no-gui -no-apps -no-wait -pkg-path /usr/lib/tcllib1.19 && \
+
+.docker-login: &docker-login
+  before_script:
+    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
+
+.docker-build: &docker-build
+  dependencies:
+    - dist
+  script:
+    - docker build --pull --force-rm=true
+      --build-arg VCS_REF=`git rev-parse --short HEAD`
+      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+      --build-arg VERSION="${CI_COMMIT_REF_NAME}"
+      --tag=${DOCKER_IMAGE_NAME} .
+      --file=./docker/Dockerfile
+    - docker push ${DOCKER_IMAGE_NAME}
+
+stages:
+  - test
+  - dist
+  - docker
+
+test:
+  stage: test
+  <<: *alpine
+  script:
+    - make test
+
+dist:
+  stage: dist
+  <<: *alpine
+  script:
+    - make build
+    - cp target/tcltm .
+  artifacts:
+    paths:
+      - tcltm
+
 docker:master:
-  stage: build
+  stage: docker
   image: docker:stable-git
   only:
     - master
+    - tags
   variables:
     DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}
-  before_script:
-    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
-  script:
-    - docker build --pull --force-rm=true
-      --build-arg VCS_REF=`git rev-parse --short HEAD`
-      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-      --tag=${DOCKER_IMAGE_NAME} .
-    - docker push ${DOCKER_IMAGE_NAME}
+  <<: *docker-login
+  <<: *docker-build
 
 docker:branches:
-  stage: build
+  stage: docker
   image: docker:stable-git
   except:
     - master
+    - tags
   variables:
     DOCKER_IMAGE_NAME: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}:${CI_BUILD_REF_NAME}
-  before_script:
-    - echo ${CI_JOB_TOKEN} | docker login -u gitlab-ci-token --password-stdin ${CI_REGISTRY}
-  script:
-    - docker build --pull --force-rm=true
-      --build-arg VCS_REF=`git rev-parse --short HEAD`
-      --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
-      --tag=${DOCKER_IMAGE_NAME} .
-    - docker push ${DOCKER_IMAGE_NAME}
+  <<: *docker-login
+  <<: *docker-build

@@ -1,1 +1,5 @@
 tcltm
+*.tm
+
+tcl8/
+target/

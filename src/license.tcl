@@ -1,16 +1,14 @@
+# license.tcl
+#
+#   Handler for project LICENSE
+#
 namespace eval ::tcltm::license {
-    variable filename LICENSE
-
-    proc exists { dir } {
-        variable filename
-
+    proc exists { dir {filename LICENSE} } {
         set fname [file normalize [file join $dir $filename]]
         return [file exists $fname]
     }
 
-    proc load { dir } {
-        variable filename
-
+    proc load { dir {filename LICENSE} } {
         set fname [file normalize [file join $dir $filename]]
         set fh [open $fname RDONLY]
         set data [read $fh]
@@ -19,13 +17,18 @@ namespace eval ::tcltm::license {
         return $data
     }
 
+    # Format proc
     proc format { data } {
         set license [list]
-        lappend license $::tcltm::markup::divider "#"
+        lappend license $::tcltm::markup::divider
         foreach line [split $data "\n"] {
-            lappend license [::tcltm::markup::comment $line]
+            if { $line eq {} } {
+                lappend license "#"
+            } else {
+                lappend license [::tcltm::markup::comment $line]
+            }
         }
-        lappend license "#" $::tcltm::markup::divider
+        lappend license $::tcltm::markup::divider
 
         return $license
     }

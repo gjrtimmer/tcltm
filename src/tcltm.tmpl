@@ -1,0 +1,173 @@
+#!/bin/sh
+# the next line restarts using tclsh \
+exec tclsh "$0" ${1+"$@"}
+
+if { ![package vsatisfies [package provide Tcl] 8.5] } {puts stdout "Tcl: >= 8.5 is required"; return}
+if { ![package vsatisfies [package require sha1] 2.0.3] } {puts stdout "sha1: >= 2.0.3 is required"; return}
+if { ![package vsatisfies [package require yaml] 0.3.6] } {puts stdout "yaml: >= 0.3.6 is required"; return}
+
+package require try ; # For 8.5. Integrated with 8.6. Tcllib.
+
+@SOURCE@
+namespace eval ::tcltm {
+    variable version @VERSION@
+    variable commit @COMMIT@
+
+    proc usage {} {
+        puts stdout [subst {
+@USAGE@
+}]
+    }
+
+    proc main { args } {
+        array set options {
+            in {}
+            out {}
+            config {.tcltm}
+            pkg {}
+            strip 0
+            version-from-index 0
+            exclude-satisfy-tcl 0
+            exclude-deps 0
+            exclude-provide 0
+            repo 0
+            scan {}
+            verbose 0
+            help 0
+            version 0
+        }
+
+        while { [llength $args] } {
+            switch -glob -- [lindex $args 0] {
+                -i -
+                --in                    {set args [lassign $args - options(in)]}
+                -o -
+                --out                   {set args [lassign $args - options(out)]}
+                -c -
+                --config                {set args [lassign $args - options(config)]}
+                -p -
+                --pkg                   {set args [lassign $args - options(pkg)]}
+
+                --version-from-index    {set options(version-from-index) 1; set args [lrange $args 1 end]}
+                --strip-comments        {set options(strip) 1; set args [lrange $args 1 end]}
+                --exclude-satisfy-tcl   {set options(exclude-satisfy-tcl) 1; set args [lrange $args 1 end]}
+                --exclude-deps          {set options(exclude-deps) 1; set args [lrange $args 1 end]}
+                --exclude-provide       {set options(exclude-provide) 1; set args [lrange $args 1 end]}
+                --repository            {set options(repo) 1; set args [lrange $args 1 end]}
+
+                --scan                  {set args [lassign $args - options(scan)]}
+
+                --verbose               {set options(verbose) 1; set args [lrange $args 1 end]}
+                --version               {set options(version) 1; set args [lrange $args 1 end]}
+                -h -
+                --help                  {set options(help) 1; set args [lrange $args 1 end]}
+
+                --                      {set args [lrange $args 1 end]; break}
+                -*                      {puts stdout "Unknown option [lindex $args 0]"; exit 1}
+                default                 {break}
+            }
+        }
+
+        # Show version
+        if { $options(version) } {
+            puts stdout "$::tcltm::version ($::tcltm::commit)"; flush stdout
+            exit 0
+        }
+
+        # Show help is requested
+        if { $options(help) } {
+            usage
+            exit 1
+        }
+
+        # Scan for dependencies
+        if { [string length $options(scan)] > 0 } {
+            set res [::tcltm::scan {*}$options(scan)]
+            foreach {f r} $res {
+                puts stdout "File: $f"
+                foreach p $r {
+                    puts stdout "  Type:    [dict get $p type]"
+                    puts stdout "  Package: [dict get $p package]"
+                    puts stdout "  Version: [dict get $p version]\n"
+                }
+            }
+            exit 0
+        }
+
+        # input/output directory validation
+        foreach dir {in out} {
+            if { [string length $options($dir)] == 0 } {
+                set options($dir) [file normalize [pwd]]
+                if { $options(verbose) } {
+                    puts stdout "No ${dir}put directory provided"
+                    puts stdout "  => Using current working directory \[[file normalize [pwd]]\]"
+                    flush stdout
+                }
+            } else {
+                if { ![file isdirectory $options($dir)] } {
+                    puts stdout "$options($dir) is not a directory"; exit 1
+                }
+            }
+        }
+
+        # Locate configuration
+        if { ![::tcltm::config::exists $options(in) $options(config)] } {
+            puts stdout "Missing configuration: $options(config)"; exit 1
+        }
+
+        # Load configuration and merge with commandline options
+        if { $options(verbose) } { puts stdout "Loading Configuration" }
+        set config [::tcltm::config::load $options(in) $options(config)]
+        set config [::tcltm::config::merge $config [array get options]]
+        set config [::tcltm::config::parse $config]
+
+        if { $options(verbose) } { puts stdout $config }
+
+        # Compile all packages wihtin configuration
+        foreach p [dict get $config package] {
+            set pkg [dict get $p name]
+            if { [string length $options(pkg)] > 0 } {
+                if { $pkg ne $options(pkg) } {
+                    continue
+                }
+            }
+
+            puts stdout "Building: $pkg"
+
+            # New Module
+            ::tcltm::module::new $config
+
+            # Handle LICENSE
+            ::tcltm::module::license $pkg
+
+            # Module Header
+            ::tcltm::module::header $pkg
+
+            # Module Satify Tcl Version
+            ::tcltm::module::satisfy-tcl-version $pkg
+
+            # Module Dependencies
+            ::tcltm::module::deps $pkg
+
+            # Module Bootstrap
+            ::tcltm::module::script $pkg bootstrap
+
+            # Binary Loader
+            ::tcltm::module::binaryloader $pkg
+
+            # Module Source Code
+            ::tcltm::module::code $pkg
+
+            # Module Init Script
+            ::tcltm::module::script $pkg init
+
+            # Module Provide
+            ::tcltm::module::pkg-provide $pkg
+
+            # Write Module
+            ::tcltm::module::write $pkg
+        }
+    }
+}
+
+::tcltm::main {*}$::argv

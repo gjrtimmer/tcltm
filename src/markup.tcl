@@ -1,5 +1,9 @@
+# markup.tcl
+#
+#   Markup handler for tcltm
+#
 namespace eval ::tcltm::markup {
-    variable divider "# ##############################################################################"
+    variable divider [string repeat "#" 80]
 
     proc comment { n args } {
         set line {}
@@ -36,7 +40,15 @@ namespace eval ::tcltm::markup {
     }
 
     proc script { body args } {
-        regsub -all {\n$} $body {} body
+        regsub -all "\n$" $body {} body
         return [string trimleft [format "[subst -nocommands -novariables $body]" {*}$args] "\n"]
+        # set script [string trimleft [format "[subst -nocommands -novariables $body]" {*}$args] "\n"]
+
+        # set lines [list]
+        # foreach l [split $script "\n"] {
+        #     lappend lines [string trimleft $l]
+        # }
+
+        # return [join $lines "\n"]
     }
 }

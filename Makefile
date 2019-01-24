@@ -1,18 +1,39 @@
-# Tcl Module Makefile
+# tcltm Makefile
+PROJECT			= tcltm
+PROJECTDIR		= $(CURDIR)
+SCRIPTDIR		= $(CURDIR)/.build
+SOURCEDIR		= $(CURDIR)/src
+SOURCEFILES		= $(shell find $(SOURCEDIR) -name '*.tcl' -not -name '*test*')
+TARGETDIR		= $(CURDIR)/target
+VERSION			= $(shell $(SCRIPTDIR)/version)
+COMMIT			= $(shell git rev-parse --short HEAD)
 
-files = binary.tcl config.tcl markup.tcl license.tcl
+# Create Target Directory
+$(TARGETDIR):
+	@mkdir -p $(TARGETDIR)
+	@chmod 777 $(TARGETDIR)
 
-tcltm:
-	for f in $(files); do (cat $${f}; echo) >> tcltm.src; done
-	sed -e '/#SOURCE#/{r tcltm.src' -e 'N' -e 'G}' tcltm.tcl > tcltm
-	chmod +x tcltm
-	rm tcltm.src
+source: $(SOURCEFILES) | $(TARGETDIR)
+	@sed '/^[[:blank:]]*#/d' $^ > $(TARGETDIR)/$(PROJECT)
+	@sed -i '/^[[:space:]]*$$/d' $(TARGETDIR)/$(PROJECT)
 
-# Targets
-all: tcltm
+build: | source
+	@echo "Building tcltm"
+	@sed -e '/@SOURCE@/{r $(TARGETDIR)/source' -e 'd' -e 'N' -e 'G}' $(SOURCEDIR)/tcltm.tmpl > $(TARGETDIR)/$(PROJECT)
+	@sed -i -e '/@USAGE@/{r $(SOURCEDIR)/usage.inc' -e 'd' -e 'N' -e 'G}' $(TARGETDIR)/$(PROJECT)
+	@sed -i -e 's/@VERSION@/$(VERSION)/' $(TARGETDIR)/$(PROJECT)
+	@sed -i -e 's/@COMMIT@/$(COMMIT)/' $(TARGETDIR)/$(PROJECT)
+	@chmod +x $(TARGETDIR)/$(PROJECT)
 
-install:
-	cp tcltm /usr/bin/tcltm
+install: build
+	@echo "Installing tcltm => /usr/local/bin/tcltm"
+	@cp $(TARGETDIR)/$(PROJECT) /usr/local/bin/tcltm
 
-clean:
-	if [ -f tcltm ]; then rm tcltm; fi
+test: | $(SOURCEDIR)
+	@tclsh $(SOURCEDIR)/test.tcl
+
+clean: | $(PROJECTDIR)
+	@rm -rf $(TARGETDIR)
+	@rm -f $(PROJECTDIR)/tcltm
+
+.PHONY: build install test clean

@@ -1,0 +1,27 @@
+{
+    "files.eol": "\n",
+    "files.encoding": "utf8",
+    "files.insertFinalNewline": true,
+    "files.trimTrailingWhitespace": true,
+    "files.associations": {
+        ".tcltm": "yaml",
+        "tcltm": "tcl",
+        "*.test": "tcl",
+        "*.tm": "tcl",
+        "*.inc": "tcl",
+        "*.tmpl": "tcl",
+        "build": "shellscript"
+    },
+    "saveAndRun": {
+        "commands": [
+            {
+                "match": "\\.test$",
+                "cmd": "make test",
+                "wsl": true,
+                "isShellCommand": true
+            }
+        ]
+    },
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\bash.exe",
+    "markdownTableFormatter.enable": true
+}
