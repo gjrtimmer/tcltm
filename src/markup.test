@@ -1,0 +1,77 @@
+package require Tclx
+package require tcltest
+namespace import ::tcltest::*
+
+# Module under test
+source [file join [file dirname [file normalize [info script]]] markup.tcl]
+
+test comment {
+    Test: Comment
+} -body {
+    set tests {
+        {{TCLTM} {# TCLTM}}
+        {{INIT HEADER} {# INIT HEADER}}
+        {{ARGS} {# ARGS ARG_1 ARG_2 ARG_3} ARG_1 ARG_2 ARG_3}
+    }
+
+    foreach t $tests {
+        if { [llength $t] eq 2 } {
+            set c [::tcltm::markup::comment [lindex $t 0]]
+            if { $c ne [lindex $t 1] } {
+                return 0
+            }
+        } else {
+            set c [::tcltm::markup::comment [lindex $t 0] {*}[lrange $t 2 end]]
+            if { $c ne [lindex $t 1] } {
+                return 0
+            }
+        }
+    }
+
+    return 1
+} -result 1
+
+test isComment {
+    Test: IsComment
+} -body {
+    set c "# COMMENT LINE"
+    return [::tcltm::markup::iscomment $c]
+} -result 1
+
+test meta {
+    Test: Meta Comment Line
+} -body {
+    set tests {
+        {{KEY} {VALUE} {# KEY: VALUE}}
+        {{foo} {bar} {# FOO: bar}}
+    }
+
+    foreach t $tests {
+        set c [::tcltm::markup::meta [lindex $t 0] [lindex $t 1]]
+        if { $c ne [lindex $t 2] } {
+            return 0
+        }
+    }
+
+    return 1
+} -result 1
+
+
+test script {
+    Test: Script
+} -body {
+    set tests {
+        {{load $binary} {load $binary}}
+        {{catch {file delete -force $binary}} {catch {file delete -force $binary}}}
+    }
+
+    foreach t $tests {
+        if { [lindex $t 0] ne [lindex $t 1] } {
+            return 0
+        }
+    }
+
+    return 1
+} -result 1
+
+cleanupTests

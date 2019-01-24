@@ -1,0 +1,32 @@
+package require Tclx
+package require tcltest
+namespace import ::tcltest::*
+
+# License depends on markup
+source [file join [file dirname [file normalize [info script]]] markup.tcl]
+
+# Module under test
+source [file join [file dirname [file normalize [info script]]] license.tcl]
+
+test licenseExists {
+    Test: License Exists
+} -body {
+    ::tcltm::license::exists .
+} -result 1
+
+test licenseFormat {
+    Test: License Format
+} -body {
+    set raw [::tcltm::license::load .]
+    set lic [::tcltm::license::format $raw]
+    set l [join $lic "\n"]
+    ::tcltest::makeFile $l test.lic
+
+    if { [::tcltest::viewFile test.lic] eq $l } {
+        return 1
+    }
+
+    return 0
+} -result 1
+
+::tcltest::cleanupTests

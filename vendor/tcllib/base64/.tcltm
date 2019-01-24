@@ -1,0 +1,37 @@
+--- # tcllib base64
+package:
+  - name: base64
+    version: ~
+    tcl: 8.2
+    summary: Encode/Decode base64 for a string
+    license: license.terms
+    files:
+      - name: base64.tcl
+  - name: uuencode
+    version: ~
+    tcl: 8.2
+    summary: Provide a Tcl only implementation of uuencode and uudecode.
+    license: license.terms
+    files:
+      - name: uuencode.tcl
+    bootstrap: |-
+      if {[catch {package require tcllibc}]} {
+          catch {package require Trf}
+      }
+  - name: yencode
+    version: ~
+    tcl: 8.2
+    summary: Provide a Tcl only implementation of yEnc encoding algorithm
+    license: license.terms
+    dependencies:
+      - crc32
+      - tcllibc
+    files:
+      - name: yencode.tcl
+  - name: ascii85
+    version: ~
+    tcl: 8.4
+    summary: Encode/Decode ascii85 for a string
+    license: license.terms
+    files:
+      - name: ascii85.tcl
