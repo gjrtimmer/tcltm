@@ -108,12 +108,12 @@ Accepted values for key `filtering`
 
 ### File Action
 
-| Action  | Description                                                                                                            |
-| ------- | ---------------------------------------------------------------------------------------------------------------------- |
-| none    | No action to perform for included file, this means simply include the code. This is the default.                       |
-| run     | See [File Action Run](#file-action-run)                                                                                |
-| load    | This will cause the package to load the file, with the `tcl` command `load`. `tcltm` will generate the necessary code. |
-| extract | This will extract the included file.                                                                                   |
+| Action  | Status              | Description                                                                                                            |
+| ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| none    | READY               | No action to perform for included file, this means simply include the code. This is the default.                       |
+| run     | Not Yet Implemented | See [File Action Run](#file-action-run)                                                                                |
+| load    | READY               | This will cause the package to load the file, with the `tcl` command `load`. `tcltm` will generate the necessary code. |
+| extract | Not Yet Implemented | This will extract the included file.                                                                                   |
 
 ### File Action Run
 
