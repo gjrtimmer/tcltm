@@ -73,7 +73,10 @@ namespace eval ::tcltm::binary {
                         # No Action
                     }
                     RUN {
-                        # TODO: Implement Action RUN
+                        # Action RUN
+                        if { [catch {source $tmp} err] } {
+                            return -code error "Failed to run embedded resource: $tmp"
+                        }
                     }
                     LOAD {
                         # Try normal load first
