@@ -111,7 +111,7 @@ Accepted values for key `filtering`
 | Action  | Status              | Description                                                                                                            |
 | ------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | none    | READY               | No action to perform for included file, this means simply include the code. This is the default.                       |
-| run     | Not Yet Implemented | See [File Action Run](#file-action-run)                                                                                |
+| run     | READY               | See [File Action Run](#file-action-run)                                                                                |
 | load    | READY               | This will cause the package to load the file, with the `tcl` command `load`. `tcltm` will generate the necessary code. |
 | extract | Not Yet Implemented | This will extract the included file.                                                                                   |
 
@@ -119,7 +119,24 @@ Accepted values for key `filtering`
 
 This will cause the file to be included not as source code.
 
-In the final target auto generated code will be included which will extract this file from the target and then run the included file. The run action will be done by evaluating the included target file. This action will be performed before the `InitScript` of the package if defined.
+In the final target auto generated code will be included which will extract this file from the target and then run the included file. The run action will be done by sourcing the included target file. This action will be performed before the `InitScript` of the package if defined. This allows the user to include the file to be included with action `none`. And handle the running of the file themself.
+
+It will be the user who is responsible to make sure the sourced file runs correctly.
+
+Example file which is to run.
+
+```tcl
+namespace eval app {
+    proc a1 {} {}
+    proc a2 {} {}
+}
+
+proc main { args } {
+
+}
+
+main {*}$::argv
+```
 
 ### File Filtering
 
