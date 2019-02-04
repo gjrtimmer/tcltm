@@ -55,18 +55,19 @@ namespace eval ::tcltm::module {
         if { [dict get $config options repo] } {
             set tcldir "tcl[lindex [split [dict get $cfg tcl] "."] 0]"
             set outdir [file normalize [file join [dict get $config options out] $tcldir [dict get $cfg tcl]]]
-            # Convert to Tcl: 8.5
-            try {
-                file mkdir $outdir
-            } on error err {
-                puts stdout "Failed to create output directory \[$outdir\]"
+            if { [catch {file mkdir $outdir} err] } {
+                puts stdout "Failed to create output directory ${outdir}: $err"; flush stdout
+                exit 1
             }
+
             set filepath [file join $outdir $filename]
         }
 
         # Create dirs for '::' replacement
-        # TODO: Convert to Tcl 8.5
-        file mkdir [file dirname $filepath]
+        if { [catch {file mkdir [file dirname $filepath]} err] } {
+            puts stdout "Failed to create [file dirname $filepath]: $err"
+            exit 1
+        }
 
         # Place binary comment marker
         if { [::tcltm::binary::present [dict get $cfg files]] } {

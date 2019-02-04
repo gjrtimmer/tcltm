@@ -6,8 +6,6 @@ if { ![package vsatisfies [package provide Tcl] 8.5] } {puts stdout "Tcl: >= 8.5
 if { ![package vsatisfies [package require sha1] 2.0.3] } {puts stdout "sha1: >= 2.0.3 is required"; return}
 if { ![package vsatisfies [package require yaml] 0.3.6] } {puts stdout "yaml: >= 0.3.6 is required"; return}
 
-package require try ; # For 8.5. Integrated with 8.6. Tcllib.
-
 @SOURCE@
 namespace eval ::tcltm {
     variable version @VERSION@

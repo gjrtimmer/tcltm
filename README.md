@@ -25,11 +25,11 @@ Please note that if a module is created which has dependencies that the create m
 
 These dependencies are required to use `tcltm` to create a Tcl Module.
 
-- Tcl \>= 8.5
-- tcllib
-  - sha1
-  - try
-  - yaml >= 0.3.6
+| Dependency     | Required | Notes                                          |
+| -------------- | -------- | ---------------------------------------------- |
+| Tcl \>= 8.5    | Yes      |                                                |
+| sha1           | No       | If not present then SHA1 Hash will be disabled |
+| yaml \>= 0.3.6 | Yes      | Required for `tcltm` to reads its config file  |
 
 ### Runtime
 
