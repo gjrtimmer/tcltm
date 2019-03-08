@@ -14,12 +14,12 @@ $(TARGETDIR):
 	@chmod 777 $(TARGETDIR)
 
 source: $(SOURCEFILES) | $(TARGETDIR)
-	@sed '/^[[:blank:]]*#/d' $^ > $(TARGETDIR)/$(PROJECT)
-	@sed -i '/^[[:space:]]*$$/d' $(TARGETDIR)/$(PROJECT)
+	@sed '/^[[:blank:]]*#/d' $^ > $(TARGETDIR)/$(PROJECT).src
+	@sed -i '/^[[:space:]]*$$/d' $(TARGETDIR)/$(PROJECT).src
 
-build: | source
+build: source
 	@echo "Building tcltm"
-	@sed -e '/@SOURCE@/{r $(TARGETDIR)/source' -e 'd' -e 'N' -e 'G}' $(SOURCEDIR)/tcltm.tmpl > $(TARGETDIR)/$(PROJECT)
+	@sed -e '/@SOURCE@/{r $(TARGETDIR)/tcltm.src' -e 'd' -e 'N' -e 'G}' $(SOURCEDIR)/tcltm.tmpl > $(TARGETDIR)/$(PROJECT)
 	@sed -i -e '/@USAGE@/{r $(SOURCEDIR)/usage.inc' -e 'd' -e 'N' -e 'G}' $(TARGETDIR)/$(PROJECT)
 	@sed -i -e 's/@VERSION@/$(VERSION)/' $(TARGETDIR)/$(PROJECT)
 	@sed -i -e 's/@COMMIT@/$(COMMIT)/' $(TARGETDIR)/$(PROJECT)
