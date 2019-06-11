@@ -133,7 +133,7 @@ namespace eval ::tcltm {
             puts stdout "Building: $pkg"
 
             # New Module
-            ::tcltm::module::new $config
+            ::tcltm::module::new $config $pkg
 
             # Handle LICENSE
             ::tcltm::module::license $pkg

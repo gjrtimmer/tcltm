@@ -27,6 +27,7 @@ The following keys are required.
 | name         | x        | Name of package                                                                                                        |
 | version      | x        | Version of package                                                                                                     |
 | tcl          | x        | Tcl version                                                                                                            |
+| interp       |          | Interpreter to use, this will set a cross-platform shebang                                                             |
 | summary      |          | Summary description                                                                                                    |
 | description  |          | Full description                                                                                                       |
 | license      |          | License, if not present in configuration `tcltm` will look for a `LICENSE` file                                        |
