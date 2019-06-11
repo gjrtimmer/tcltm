@@ -44,7 +44,7 @@ namespace eval ::tcltm::filter {
         }
 
         foreach f [dict get $pkg files] {
-            if { [dict get $f name] eq $file } {
+            if { [dict exists $pkg filter] && [dict get $f name] eq $file } {
                 lappend filter [dict get $f filter]
             }
         }
