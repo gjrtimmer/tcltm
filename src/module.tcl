@@ -305,8 +305,8 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
             set filter [list]
             if { [dict exists $f filtering] && [dict get $f filtering] } {
                 set filter {*}[::tcltm::filter::lfile $cfg [dict get $f name]]
-                lappend filter "PNAME [dict get $pkg name]"
-                lappend filter "PVERSION [dict get $pkg version]"
+                lappend filter "PNAME [dict get $cfg name]"
+                lappend filter "PVERSION [dict get $cfg version]"
                 lappend filter "FILENAME [dict get $f name]"
             }
 
