@@ -343,7 +343,9 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
 
                             # Filter Lines
                             if { [dict exists $f filtering] && [dict get $f filtering] } {
-                                foreach {k v} {*}$filter {
+                                foreach elm $filter {
+                                    set k [lindex $elm 0]
+                                    set v [lindex $elm 1]
                                     set line [::tcltm::filter::line $line $k $v]
                                 }
                             }
