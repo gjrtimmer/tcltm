@@ -117,7 +117,7 @@ namespace eval ::tcltm::module {
             }
         }
 
-        if { [string length [dict get $cfg license]] > 0 } {
+        if { [dict exists $cfg license] && [string length [dict get $cfg license]] > 0 } {
             # License configured
             if { [llength [split [dict get $cfg license] "\n"]] == 1 } {
                 # No multiline license configured in configuration
