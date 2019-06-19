@@ -14,6 +14,8 @@ namespace eval ::tcltm::env {
             } else {
                 error "environment variable '[lindex $l 1]' does not exists"
             }
+        } else {
+            set v $val
         }
 
         return $v
