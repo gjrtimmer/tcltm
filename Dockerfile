@@ -1,12 +1,12 @@
-FROM alpine:3.8 AS BASE
+FROM alpine:3.9 AS BASE
 
 RUN echo 'http://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
     apk add --no-cache --update --virtual .download wget && \
     apk add --no-cache --update ca-certificates wget tcl tclx && \
     apk upgrade --update --no-cache && \
     update-ca-certificates && \
-    wget https://github.com/tcltk/tcllib/archive/tcllib-1-19.tar.gz -O - | tar -xz -C /tmp && \
-    tclsh /tmp/tcllib-tcllib-1-19/installer.tcl -no-html -no-nroff -no-examples -no-gui -no-apps -no-wait -pkg-path /usr/lib/tcllib1.19 && \
+    wget https://github.com/tcltk/tcllib/archive/tcllib-1-19-rc-2.tar.gz -O - | tar -xz -C /tmp && \
+    tclsh /tmp/tcllib-tcllib-1-19-rc-2/installer.tcl -no-html -no-nroff -no-examples -no-gui -no-apps -no-wait -pkg-path /usr/lib/tcllib1.19 && \
     apk del .download
 
 FROM base AS BUILDER
