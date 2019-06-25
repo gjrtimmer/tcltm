@@ -267,7 +267,7 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
             if { [llength [split [dict get $cfg $type] "\n"]] == 1 } {
                 if { [string match "*.tcl" [lindex [split [dict get $cfg $type] "\n"] 0]] } {
                     set bfile [lindex [split [dict get $cfg $type] "\n"] 0]
-                    foreach line [split [::tcltm::binary::readfile [dict get $config options in] [::tcltm::binary::filename $bfile]] "\n"] {
+                    foreach line [split [::tcltm::binary::readfile [dict get $config options in] [::tcltm::binary::filename [dict get $config options in] $bfile]] "\n"] {
                         if { [dict get $config options strip] && [::tcltm::markup::iscomment $line] } {
                             # Ignore line
                         } else {
