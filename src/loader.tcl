@@ -96,6 +96,7 @@ namespace eval ::tcltm::binary {
                     }
                 }
             }
+            incr bindex
         }
     }
 }
