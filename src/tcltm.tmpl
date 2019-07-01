@@ -28,6 +28,7 @@ namespace eval ::tcltm {
             exclude-satisfy-tcl 0
             exclude-deps 0
             exclude-provide 0
+            interactive-loader 0
             repo 0
             scan {}
             verbose 0
@@ -52,6 +53,7 @@ namespace eval ::tcltm {
                 --exclude-deps          {set options(exclude-deps) 1; set args [lrange $args 1 end]}
                 --exclude-provide       {set options(exclude-provide) 1; set args [lrange $args 1 end]}
                 --repository            {set options(repo) 1; set args [lrange $args 1 end]}
+                --interactive-loader    {set options(interactive-loader) 1; set args [lrange $args 1 end]}
 
                 --scan                  {set args [lassign $args - options(scan)]}
 

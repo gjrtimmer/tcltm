@@ -389,6 +389,11 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
             lappend content [::tcltm::markup::nl]
             lappend content [::tcltm::markup::comment "TCLTM BINARY LOADER BEGIN"]
             lappend content [::tcltm::markup::script $::tcltm::loader::script]
+            if { [dict get $config options interactive-loader] } {
+                lappend content [::tcltm::markup::script $::tcltm::loader::interactive]
+            } else {
+                lappend content [::tcltm::markup::script $::tcltm::loader::action]
+            }
             lappend content [::tcltm::markup::comment "TCLTM BINARY LOADER END"]
         }
 

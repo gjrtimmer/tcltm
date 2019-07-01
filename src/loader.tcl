@@ -100,7 +100,14 @@ namespace eval ::tcltm::binary {
         }
     }
 }
-::tcltm::binary::loader
 } ; # END Variable script
+    variable action {
+::tcltm::binary::loader
+};
 
+    variable interactive {
+if { $tcl_interactive } {
+    ::tcltm::binary::loader
+}
+}
 } ; # END Namespace
