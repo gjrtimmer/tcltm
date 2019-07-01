@@ -261,6 +261,14 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
         variable content
         variable cfg [pkgcfg $pkg]
 
+        # Fix filtering for bootstrap and init
+        set filter [list]
+        lappend filter "PNAME [dict get $cfg name]"
+        lappend filter "PVERSION [dict get $cfg version]"
+        if { [dict exists $pkg filter] } {
+            lappend filter [dict get $pkg filter]
+        }
+
         if { [dict exists $cfg $type] && [string length [dict get $cfg $type]] > 0 } {
             lappend content [::tcltm::markup::nl]
             lappend content [::tcltm::markup::comment "TCLTM [string toupper $type] BEGIN"]
@@ -271,6 +279,11 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                         if { [dict get $config options strip] && [::tcltm::markup::iscomment $line] } {
                             # Ignore line
                         } else {
+                            foreach elm $filter {
+                                set k [lindex $elm 0]
+                                set v [lindex $elm 1]
+                                set line [::tcltm::filter::line $line $k $v]
+                            }
                             lappend content $line
                         }
                     }
@@ -283,6 +296,11 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                     if { [dict get $config options strip] && [::tcltm::markup::iscomment $line] } {
                         # Ignore line
                     } else {
+                        foreach elm $filter {
+                            set k [lindex $elm 0]
+                            set v [lindex $elm 1]
+                            set line [::tcltm::filter::line $line $k $v]
+                        }
                         lappend content [::tcltm::markup::script $line]
                     }
                 }
