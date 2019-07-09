@@ -270,11 +270,12 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
         set filter [list]
         lappend filter "PNAME [dict get $cfg name]"
         if { [dict exists $cfg version] } {
-            lappend filter "PVERSION [dict get $cfg version]"
+            lappend filter "PVERSION \"[dict get $cfg version]\""
         }
         if { [dict exists $pkg filter] } {
             lappend filter [dict get $pkg filter]
         }
+        puts stdout $filter
 
         if { [dict exists $cfg $type] && [string length [dict get $cfg $type]] > 0 } {
             lappend content [::tcltm::markup::nl]
@@ -289,7 +290,7 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                             foreach elm $filter {
                                 set k [lindex $elm 0]
                                 set v [lindex $elm 1]
-                                set line [::tcltm::filter::line $line $k $v]
+                                set line [::tcltm::filter::line $line $k "$v"]
                             }
                             lappend content $line
                         }
@@ -339,7 +340,7 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                 lappend filter "PNAME [dict get $cfg name]"
 
                 if { [dict exists $cfg version] } {
-                    lappend filter "PVERSION [dict get $cfg version]"
+                    lappend filter "PVERSION \"[dict get $cfg version]\""
                 }
                 lappend filter "FILENAME [dict get $f name]"
             }
