@@ -66,7 +66,9 @@ namespace eval ::tcltm::config {
             dict set p files $files
 
             # Resolve Version
-            dict set p version [::tcltm::env::resolve [dict get $p version]]
+            if { [dict exists $p version] } {
+                dict set p version [::tcltm::env::resolve [dict get $p version]]
+            }
 
             # Resolve version from pkgIndex.tcl
             if { [dict get $cfg options version-from-index] } {

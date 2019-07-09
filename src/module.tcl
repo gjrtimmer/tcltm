@@ -46,9 +46,10 @@ namespace eval ::tcltm::module {
         }
 
         # Build module filename
-        set filename [format {%s-%s%s} [dict get $cfg name] [dict get $cfg version] $ext]
         if { [dict exists $cfg finalname] && [string length [dict get $cfg finalname]] > 0 } {
             set filename [dict get $cfg finalname]
+        } else {
+            set filename [format {%s-%s%s} [dict get $cfg name] [dict get $cfg version] $ext]
         }
 
         # Tcl Module '::' Fix
@@ -264,7 +265,9 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
         # Fix filtering for bootstrap and init
         set filter [list]
         lappend filter "PNAME [dict get $cfg name]"
-        lappend filter "PVERSION [dict get $cfg version]"
+        if { [dict exists $cfg version] } {
+            lappend filter "PVERSION [dict get $cfg version]"
+        }
         if { [dict exists $pkg filter] } {
             lappend filter [dict get $pkg filter]
         }
@@ -391,8 +394,12 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
         variable cfg [pkgcfg $pkg]
 
         if { ![dict get $config options exclude-provide] } {
-            lappend content [::tcltm::markup::nl]
-            lappend content [::tcltm::markup::script {package provide %s %s} [dict get $cfg name] [dict get $cfg version]]
+            if { [dict exists $cfg version] } {
+                lappend content [::tcltm::markup::nl]
+                lappend content [::tcltm::markup::script {package provide %s %s} [dict get $cfg name] [dict get $cfg version]]
+            } else {
+                puts stdout "Skipping Package Provide due to missing version information"
+            }
         }
 
         return -code ok
