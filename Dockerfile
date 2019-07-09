@@ -37,3 +37,5 @@ LABEL \
     com.damagehead.gitlab.license=MIT
 
 COPY --from=BUILDER /usr/local/bin/tcltm /usr/local/bin/tcltm
+
+RUN apk add --no-cache --update make
