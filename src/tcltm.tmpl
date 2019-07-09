@@ -24,6 +24,7 @@ namespace eval ::tcltm {
             config {.tcltm}
             pkg {}
             strip 0
+            strip-resource-dir 0
             version-from-index 0
             exclude-satisfy-tcl 0
             exclude-deps 0
@@ -49,6 +50,7 @@ namespace eval ::tcltm {
 
                 --version-from-index    {set options(version-from-index) 1; set args [lrange $args 1 end]}
                 --strip-comments        {set options(strip) 1; set args [lrange $args 1 end]}
+                --strip-resource-dir    {set options(strip-resource-dir) 1; set args [lrange $args 1 end]}
                 --exclude-satisfy-tcl   {set options(exclude-satisfy-tcl) 1; set args [lrange $args 1 end]}
                 --exclude-deps          {set options(exclude-deps) 1; set args [lrange $args 1 end]}
                 --exclude-provide       {set options(exclude-provide) 1; set args [lrange $args 1 end]}

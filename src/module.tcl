@@ -194,9 +194,13 @@ namespace eval ::tcltm::module {
                 set fcfg [list {*}$fcfg {*}$enc]
 
                 # Create Header
+                set name [dict get $fcfg name]
+                if { [dict get $config options strip-resource-dir] } {
+                    set name [file tail $name]
+                }
                 set header [format {ID %s NAME %s SIZE %s HASH %s} \
                     [dict get $fcfg id] \
-                    [dict get $fcfg name] \
+                    $name \
                     [dict get $fcfg size] \
                     [dict get $fcfg hash] \
                 ]
