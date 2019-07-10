@@ -275,7 +275,6 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
         if { [dict exists $pkg filter] } {
             lappend filter [dict get $pkg filter]
         }
-        puts stdout $filter
 
         if { [dict exists $cfg $type] && [string length [dict get $cfg $type]] > 0 } {
             lappend content [::tcltm::markup::nl]
