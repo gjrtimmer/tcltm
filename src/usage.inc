@@ -23,6 +23,10 @@ OPTIONS:
     --exclude-deps          Exclude package require commands for dependencies
     --exclude-provide       Exclude package provide command
 
+    --interactive-loader    Enable interactive loader.
+                            Interactive loader will only run the binary loader when
+                            the tcl interpreter is in interactive mode.
+
     --repository            Create repository output directories.
                             (tcl8/tcl<version>/module.tm)
 
