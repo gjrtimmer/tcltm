@@ -18,6 +18,7 @@ OPTIONS:
                             Only works when package name between config and
                             pkgIndex.tcl is the same.
     --strip-comments        Strip comments from source
+    --strip-resource-dir    Strip the directory from the source files.
     --exclude-satisfy-tcl   Exclude Tcl vsatisfies command
     --exclude-deps          Exclude package require commands for dependencies
     --exclude-provide       Exclude package provide command
