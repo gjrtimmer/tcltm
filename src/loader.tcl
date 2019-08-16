@@ -51,6 +51,9 @@ namespace eval ::tcltm::binary {
         foreach f [dict get $resources files] {
             set finfo [dict get $resources $f]
             set tmp [file normalize [file join $path [dict get $finfo NAME]]]
+            if { ![file exists [file dirname $tmp]] } {
+                file mkdir [file dirname $tmp]
+            }
             set fh [open $tmp w]
             fconfigure $fh -translation binary
             fconfigure $fh -encoding binary
