@@ -30,7 +30,8 @@ build: source
 .PHONY: install
 install: build
 	@echo "Installing tcltm => ~/.local/bin"
-	@cp $(TARGETDIR)/$(PROJECT)  ~/.local/bin
+	@mkdir -p ~/.local/bin
+	@cp $(TARGETDIR)/$(PROJECT)  ~/.local/bin/tcltm
 
 .PHONY: test
 test: | $(SOURCEDIR)
