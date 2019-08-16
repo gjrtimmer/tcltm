@@ -32,6 +32,7 @@ namespace eval ::tcltm {
             interactive-loader 0
             repo 0
             scan {}
+            create-idx 0
             verbose 0
             help 0
             version 0
@@ -58,7 +59,7 @@ namespace eval ::tcltm {
                 --interactive-loader    {set options(interactive-loader) 1; set args [lrange $args 1 end]}
 
                 --scan                  {set args [lassign $args - options(scan)]}
-
+                --create-index          {set options(create-idx) 1; set args [lrange $args 1 end]}
                 --verbose               {set options(verbose) 1; set args [lrange $args 1 end]}
                 --version               {set options(version) 1; set args [lrange $args 1 end]}
                 -h -
@@ -110,6 +111,16 @@ namespace eval ::tcltm {
                     puts stdout "$options($dir) is not a directory"; exit 1
                 }
             }
+        }
+
+        # Create .tcltm file index from directory
+        # --create-index
+        if { $options(create-idx) } {
+            set files [glob -nocomplain -directory $options(in) *]
+            foreach f $files {
+                puts stdout [string replace $f 0 [string length $options(in)] {}]
+            }
+            exit 0
         }
 
         # Locate configuration

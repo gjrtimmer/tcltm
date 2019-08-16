@@ -34,6 +34,12 @@ OPTIONS:
                             If file is a directory, all .tcl files in the
                             directory will be scanned.
 
+    --create-index          Create .tcltm file index from a directory.
+                            The directory to be scanned will be the `Input Directory`.
+                            The index is either written to either a new .tcltm file
+                            or an existing if present. Alternate config file location
+                            will be respected. File locations returned will be relative.
+
     --verbose               Verbose logging
     --version               Show version
     -h, --help              Show help
