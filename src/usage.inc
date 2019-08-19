@@ -23,6 +23,8 @@ OPTIONS:
     --exclude-deps          Exclude package require commands for dependencies
     --exclude-provide       Exclude package provide command
 
+    --preserve-require      Preserve 'package require' in source code.
+
     --interactive-loader    Enable interactive loader.
                             Interactive loader will only run the binary loader when
                             the tcl interpreter is in interactive mode.

@@ -378,7 +378,10 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                     if { [dict get $config options strip] && [::tcltm::markup::iscomment $line] } {
                         # Ignore line
                     } else {
-                        if { ![regexp {^(?:([[:blank:]]+)?)package provide*} $line] && ![regexp {^(?:([[:blank:]]+)?)package require.*$} $line] } {
+                        if { ![regexp {^(?:([[:blank:]]+)?)package provide*} $line] } {
+                            if { ![dict get $config options preserve-require] } {
+                                continue
+                            }
 
                             # Filter Lines
                             if { [dict exists $f filtering] && [dict get $f filtering] } {
