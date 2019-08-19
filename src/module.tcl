@@ -194,6 +194,12 @@ namespace eval ::tcltm::module {
                 dict set fcfg id $bidx
                 incr bidx
 
+                # Fix wildcards in filename
+                if { [string match {*\**} [dict get $fcfg name]] } {
+                    set f [glob -directory [dict get $config options in] [dict get $fcfg name]]
+                    dict set fcfg name [file tail $f]
+                }
+
                 # Encode file to header
                 set enc [::tcltm::binary::encode [dict get $config options in] [dict get $fcfg name]]
                 set fcfg [list {*}$fcfg {*}$enc]
