@@ -49,7 +49,12 @@ namespace eval ::tcltm::module {
         if { [dict exists $cfg finalname] && [string length [dict get $cfg finalname]] > 0 } {
             set filename [dict get $cfg finalname]
         } else {
-            set filename [format {%s-%s%s} [dict get $cfg name] [dict get $cfg version] $ext]
+            if { [dict exists $cfg fileversion] } {
+                set fileversion [::tcltm::env::resolve [dict get $cfg fileversion]]
+                set filename [format {%s-%s%s} [dict get $cfg name] $fileversion $ext]
+            } else {
+                set filename [format {%s-%s%s} [dict get $cfg name] [dict get $cfg version] $ext]
+            }
         }
 
         # Tcl Module '::' Fix
