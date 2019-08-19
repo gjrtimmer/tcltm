@@ -14,6 +14,11 @@ namespace eval ::tcltm::binary {
     }
 
     proc filename { dir file } {
+        set f $file
+        if { [string match {*\**} $f] } {
+            set f [glob -directory $dir $f]
+            return $f
+        }
         return [file normalize [file join $dir $file]]
     }
 
