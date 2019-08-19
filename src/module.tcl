@@ -379,8 +379,8 @@ if { ![package vsatisfies [package provide Tcl] %s] } {
                         # Ignore line
                     } else {
                         if { ![regexp {^(?:([[:blank:]]+)?)package provide*} $line] } {
-                            if { ![dict get $config options preserve-require] } {
-                                continue
+                            if { ![dict get $config options preserve-require] && [regexp {^(?:([[:blank:]]+)?)package require*} $line] } {
+                                # NOOP
                             }
 
                             # Filter Lines
