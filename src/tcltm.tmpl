@@ -168,6 +168,9 @@ namespace eval ::tcltm {
             # Module Provide
             ::tcltm::module::pkg-provide $pkg
 
+            # Module Finalize
+            ::tcltm::module::script $pkg finalize
+
             # Write Module
             ::tcltm::module::write $pkg
         }
