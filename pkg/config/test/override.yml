@@ -1,0 +1,38 @@
+---
+version: "4.0"
+
+tcltm:
+  include:
+    require: true
+  exclude:
+    comments: true
+    resource-prefix: ""
+    resource-path: true
+    dependencies: true
+    provide: true
+    satisfy-tcl: true
+  output:
+    repository: true
+    interactive-loader: true
+
+modules:
+  - name: override-props
+    version: 0.0.0
+    tcl: 8.6
+    include:
+      require: false
+    exclude:
+      comments: false
+      resource-prefix: "/tmp"
+      resource-path: true
+      dependencies: false
+      provide: false
+      satisfy-tcl: false
+    output:
+      repository: false
+      interactive-loader: false
+  - name: override-single
+    version: 0.0.0
+    tcl: 8.6
+    include:
+      require: false

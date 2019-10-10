@@ -1,0 +1,43 @@
+---
+version: "4.0"
+
+tcltm:
+  include:
+    require: true
+  exclude:
+    comments: true
+    resource-prefix: ""
+    resource-path: true
+    dependencies: true
+    provide: true
+    satisfy-tcl: true
+  output:
+    repository: true
+    interactive-loader: true
+
+modules:
+  - name: config-test
+    version: 0.0.0
+    tcl: 8.6
+    interp: tclsh
+    summary: Config Test
+    description: |-
+      Multiline description
+      for config test
+    license: LICENSE
+    dependencies:
+      - Tclx:8.4
+      - base64
+    extension: tm
+    finalname: config-test.tm
+    meta:
+      foo: bar
+    filter:
+      user: test
+    files:
+      - name: test.tcl
+        type: binary
+        action: run
+        filtering: true
+        filter:
+          os: linux
