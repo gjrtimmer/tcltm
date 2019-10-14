@@ -48,6 +48,12 @@ type Config struct {
 	// Configuration Version Number
 	Version string
 
+	// InputDirectory
+	InputDirectory string
+
+	// OutputDirectory
+	OutputDirectory string
+
 	// TclTM Configuration
 	TclTM TclTM
 
