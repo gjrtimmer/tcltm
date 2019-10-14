@@ -86,6 +86,9 @@ modules:
   - name: config-test
     version: 0.0.0
     tcl: 8.6
+    authors:
+      - Name: John Doe
+        Email: john.doe@example.com
     interp: tclsh
     summary: Config Test
     description: |-
