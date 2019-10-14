@@ -58,7 +58,7 @@ type Config struct {
 	TclTM TclTM
 
 	// Module Configuration
-	Modules []Module
+	Modules []*Module
 }
 
 // Load loads a package configuration and returns
@@ -97,9 +97,9 @@ func Load(filepath string, strict bool) (*Config, error) {
 // UnmarshalYAML custom decoder tcltm configuration
 func (c *Config) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	var aux struct {
-		Version string   `yaml:"version"`
-		TclTM   TclTM    `yaml:"tcltm,omitempty"`
-		Modules []Module `yaml:"modules"`
+		Version string    `yaml:"version"`
+		TclTM   TclTM     `yaml:"tcltm,omitempty"`
+		Modules []*Module `yaml:"modules"`
 	}
 
 	if err := unmarshal(&aux); err != nil {
