@@ -32,6 +32,7 @@ type Module struct {
 	Output       *Output           `yaml:"output,omitempty"`
 	Name         string            `yaml:"name"`
 	Version      string            `yaml:"version"`
+	Authors      []Author          `yaml:"authors,omitempty"`
 	Tcl          string            `yaml:"tcl"`
 	Interpreter  string            `yaml:"interp,omitempty"`
 	Summary      string            `yaml:"summary,omitempty"`
@@ -45,6 +46,13 @@ type Module struct {
 	Bootstrap    string            `yaml:"bootstrap,omitempty"`
 	InitScript   string            `yaml:"init,omitempty"`
 	Files        []File            `yaml:"files"`
+}
+
+// Author definition
+type Author struct {
+	Name  string `yaml:"name"`
+	Email string `yaml:"email,omitempty"`
+	Year  string `yaml:"year,omitempty"`
 }
 
 // File definition
