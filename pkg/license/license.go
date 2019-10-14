@@ -7,9 +7,11 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/gjrtimmer/tcltm/pkg/config"
+	"github.com/gjrtimmer/tcltm/pkg/markup"
 	"github.com/gjrtimmer/tcltm/pkg/resource"
 )
 
@@ -81,6 +83,31 @@ func New(c *config.Config, m *config.Module) (l *License, err error) {
 	l.content = []byte(m.License)
 
 	return l, nil
+}
+
+func (lic *License) Write(b *bytes.Buffer) (int, error) {
+	// Get LICENSE Lines
+	lines := strings.Split(string(lic.content), "\n")
+
+	// Define byte counter
+	i := 0
+
+	// Loop lines
+	for l := 0; l < len(lines); l++ {
+		// Write each LICENSE line as comment
+		// to the output
+		c, err := markup.Commentln(b, lines[l])
+
+		// Update total bytes written
+		i = i + c
+
+		// Handle error for each write
+		if err != nil {
+			return i, err
+		}
+	}
+
+	return i, nil
 }
 
 // EOF
