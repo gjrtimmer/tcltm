@@ -30,7 +30,6 @@ type Module struct {
 type Author struct {
 	Name  string `yaml:"name"`
 	Email string `yaml:"email,omitempty"`
-	Year  string `yaml:"year,omitempty"`
 }
 
 // File definition
